@@ -1,0 +1,216 @@
+/* --- Variáveis Globais (Nova Paleta de Cores) --- */
+:root {
+    --color-background: #D9D9D9;
+    /* cinza claro */
+    --color-panel: #FFFFFF;
+    /* branco */
+    --color-primary-text: #404040;
+    /* cinza escuro */
+    --color-secondary-text: #404040;
+    /* cinza escuro */
+    --color-input-border: #D9D9D9;
+    /* cinza claro */
+    --color-primary-button: #81C784;
+    /* verde */
+    --color-primary-button-hover: #6aa86d;
+    /* verde escurecido para o hover */
+    --color-link: #4CB7B3;
+    /* azul-petróleo */
+
+    --font-poppins: 'Poppins', sans-serif;
+    --focus-ring: 0 0 0 3px rgba(129, 199, 132, 0.5);
+    /* Foco baseado no verde */
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* evita scroll */
+}
+
+/* --- Estrutura Principal (Layout Fixo) --- */
+.mainContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    /* Cria o layout de duas colunas */
+    font-family: var(--font-poppins);
+    background-color: var(--color-background);
+    overflow: hidden;
+    /* Garante que não haja barras de rolagem */
+}
+
+/* --- Lado Esquerdo: Branding --- */
+.brandingSide {
+    flex: 1;
+    /* Ocupa metade da tela */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background-color: var(--color-background);
+    /* Alterado para branco para contraste */
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: var(--color-primary-text);
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    margin-top: 20px;
+}
+
+/* --- Lado Direito: Formulário de Login --- */
+.loginSide {
+    flex: 1;
+    /* Ocupa a outra metade da tela */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-primary-text);
+}
+
+.formPanel {
+    width: 450px;
+    /* Largura fixa para o painel */
+    padding: 50px;
+    background-color: var(--color-background);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.formTitle {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-primary-text);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* --- Inputs, Botões e Links --- */
+.input {
+    width: 100%;
+    height: 50px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-primary-button);
+    border-radius: 8px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    /* Espaçamento entre inputs */
+    font-family: var(--font-poppins);
+    color: var(--color-primary-text);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+    color: var(--color-secondary-text);
+    opacity: 0.7;
+    /* Suaviza o placeholder */
+}
+
+.input:focus-visible {
+    outline: none;
+    border-color: var(--color-primary-button);
+    box-shadow: var(--focus-ring);
+}
+
+.button {
+    height: 50px;
+    border-radius: 8px;
+    margin-top: 20px;
+    background-color: var(--color-primary-button);
+    color: var(--color-secondary-text);
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-poppins);
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.button:hover {
+    background-color: var(--color-primary-button-hover);
+    color: var(--color-secondary-text);
+
+}
+
+.button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.containerfooter {
+    margin-top: 30px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerfootertext {
+    color: var(--color-secondary-text);
+    font-size: 0.9rem;
+}
+
+.link {
+    color: var(--color-primary-button);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+/* --- Painel de Animação (Adaptado) --- */
+.animatedContainer {
+    /* Este painel agora cobre apenas o lado direito */
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background-color: var(--color-panel);
+    z-index: 10;
+    box-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+
+    /* A animação agora vem da direita para a esquerda */
+    transform: translateX(100%);
+}
+
+.animatedContainer.visible {
+    transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .animatedContainer {
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+}
