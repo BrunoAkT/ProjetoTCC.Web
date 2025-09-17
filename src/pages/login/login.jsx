@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import styles from './login.module.css';
-import icon from '../constants/icon';
+import icon from '../../constants/icon.js';
 import Account from '../account/account.jsx';
-import api from '../constants/api';
-import { AuthContext } from '../context/auth.jsx';
+import api from '../../constants/api';
+import { AuthContext } from '../../context/auth.jsx';
 
 function Login() {
     const [isRegisterVisible, setIsRegisterVisible] = useState(false);

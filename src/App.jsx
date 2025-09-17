@@ -1,5 +1,5 @@
 
-import Login from './login/login.jsx'
+import Login from './pages/login/login'
 
 function App() {
 
