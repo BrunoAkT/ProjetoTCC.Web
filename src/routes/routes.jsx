@@ -4,10 +4,10 @@ import { useContext } from "react";
 import { AuthContext } from "../context/auth.jsx";
 
 function Routes() {
+    //const { user } = useContext(AuthContext);
+    const user = true
 
-    const { user } = useContext(AuthContext)
-
-    return user ? console.log("logado") : <RoutesPrivated />
+    return user ? <RoutesPrivated /> : <RoutesOpen />;
 }
 
 export default Routes;

@@ -3,19 +3,118 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
     width: 100%;
     height: 100%;
     color: #333;
+    background-color: var(--color-primary-button);
 }
 
-.closeButton {
-    margin-top: 40px;
-    padding: 10px 20px;
-    border-radius: 20px;
+.formPanel {
+    width: 450px;
+    /* Largura fixa para o painel */
+    padding: 50px;
+    background-color: var(--color-background);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.formTitle {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-primary-text);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* --- Inputs, Botões e Links --- */
+.input {
+    width: 100%;
+    height: 50px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-primary-button);
+    border-radius: 8px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    /* Espaçamento entre inputs */
+    font-family: var(--font-poppins);
+    color: var(--color-primary-text);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+    color: var(--color-secondary-text);
+    opacity: 0.7;
+    /* Suaviza o placeholder */
+}
+
+.input:focus-visible {
+    outline: none;
+    border-color: var(--color-primary-button);
+    box-shadow: var(--focus-ring);
+}
+
+.button {
+    height: 50px;
+    border-radius: 8px;
+    margin-top: 20px;
+    background-color: var(--color-primary-button);
+    color: var(--color-secondary-text);
     border: none;
-    background-color: #e63946;
-    color: white;
-    font-weight: bold;
     cursor: pointer;
+    font-family: var(--font-poppins);
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.button:hover {
+    background-color: var(--color-primary-button-hover);
+    color: var(--color-secondary-text);
+
+}
+
+.button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.containerfooter {
+    margin-top: 30px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerfootertext {
+    color: var(--color-secondary-text);
+    font-size: 0.9rem;
+}
+
+.link {
+    color: var(--color-primary-button);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
 }

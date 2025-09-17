@@ -9,6 +9,7 @@ import avatarplaceholder from '../assets/AvatarPlaceholder.png';
 import edit from '../assets/Edit.png';
 import thinking from '../assets/Thinking.png'
 import stress from '../assets/Stress.png'
+import logoWhite from '../assets/logoWhite.png'
 
 export default {
     Pokerface,
@@ -21,5 +22,6 @@ export default {
     avatarplaceholder,
     edit,
     thinking,
-    stress
+    stress,
+    logoWhite
 }

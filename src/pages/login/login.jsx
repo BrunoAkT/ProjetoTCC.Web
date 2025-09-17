@@ -4,12 +4,14 @@ import icon from '../../constants/icon.js';
 import Account from '../account/account.jsx';
 import api from '../../constants/api';
 import { AuthContext } from '../../context/auth.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [isRegisterVisible, setIsRegisterVisible] = useState(false);
     const [email, setEmail] = useState('');
     const [senha, setPassword] = useState('');
     const { setUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     // Simplified handlers for showing/hiding the registration panel
     const showRegister = () => setIsRegisterVisible(true);
@@ -18,21 +20,23 @@ function Login() {
     async function executeLogin(e) {
         e.preventDefault(); // Prevent form submission from reloading the page
         try {
-            const response = await api.post('/user/login', {
-                email,
-                senha
-            });
-            if (response.data) {
-                console.log(response.data);
-                setUser(response.data);
-            }
+            navigate('/dashboard');
+
+            // const response = await api.post('/user/login', {
+            //     email,
+            //     senha
+            // });
+            // if (response.data) {
+            //     console.log(response.data);
+            //     setUser(response.data);
+            // }
         } catch (error) {
             const errorMessage = error.response?.data?.error || error.message;
             alert(`Erro ao fazer login: ${errorMessage}`); // window.alert is the web equivalent
         }
     }
 
-     return (
+    return (
         <div className={styles.mainContainer}>
             {/* LADO ESQUERDO PARA BRANDING */}
             <div className={styles.brandingSide}>

@@ -1,0 +1,60 @@
+.mainContainer {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  font-family: var(--font-poppins);
+  background: var(--color-background);
+  overflow: hidden;
+}
+
+/* Área principal */
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.header {
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-primary-text);
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--color-panel);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.cardTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-primary-text);
+  margin-bottom: 10px;
+}
+
+.cardText {
+  color: var(--color-secondary-text);
+  font-size: 0.95rem;
+  line-height: 1.4rem;
+}

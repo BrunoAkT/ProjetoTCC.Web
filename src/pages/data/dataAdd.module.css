@@ -1,0 +1,120 @@
+/* Estilização customizada para input de arquivo */
+.input[type="file"] {
+    display: none;
+}
+
+.fileLabel {
+    display: inline-block;
+    padding: 10px 0px;
+    background: var(--color-background, #f5f5f5);
+    color: var(--color-primary-text, #333);
+    border: 1px solid var(--color-primary-text, #ccc);
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 16px;
+    width: 100%;
+    text-align: center;
+}
+
+.fileLabel:hover,
+.fileLabel:focus {
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 2px var(--color-Whitegreen);
+}
+
+.fileName {
+    display: block;
+    margin-bottom: 16px;
+    color: var(--color-primary-text, #666);
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--color-primary-text);
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-primary-text);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.inputDescription {
+    height: 100px;
+    vertical-align: top;
+    resize: vertical;
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--color-primary-text);
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-primary-text);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-sizing: border-box;
+    font-family: var(--font-poppins);
+}
+
+input:focus {
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 2px var(--color-Whitegreen);
+}
+
+.mainContainer {
+    display: flex;
+    width: calc(100vw - 240px);
+    height: 100vh;
+    font-family: var(--font-poppins);
+    background: var(--color-background);
+    overflow: hidden;
+    color: var(--color-primary-text);
+}
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.dataSection {
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    margin: 0px auto;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-primary-text);
+}
+
+.dataItem {
+    border: 1px solid var(--color-primary-text);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.sectionHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
