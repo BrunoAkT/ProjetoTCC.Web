@@ -1,9 +1,12 @@
 import icon from "../constants/icon.js";
+import { IoMdExit } from "react-icons/io";
+
 import { useState } from "react";
 
 function NavBar() {
     const [hoveredLink, setHoveredLink] = useState(null);
 
+    const name = localStorage.getItem("sessionName");
     const links = ["Home", "Data", "Configurações"];
 
     return (
@@ -26,10 +29,18 @@ function NavBar() {
                 ))}
             </nav>
             <div style={styles.footer}>
-                <div style={styles.userSection}>
-                    <img src={icon.avatarplaceholder} alt='User Avatar' style={styles.avatarplaceholder} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
+                    <div style={styles.userSection}>
+                        <img src={icon.avatarplaceholder} alt='User Avatar' style={styles.avatarplaceholder} />
+                    </div>
+                    <p>{name}</p>
                 </div>
-                <p>Nome</p>
+                <div style={styles.exitButton} onClick={() => {
+                    localStorage.clear();
+                    window.location.href = '/';
+                }}>
+                    <IoMdExit size={30} />
+                </div>
             </div>
         </aside>
     );
@@ -74,27 +85,36 @@ const styles = {
     footer: {
         display: "flex",
         alignItems: "center",
+        justifyContent: "space-between",
         gap: "10px",
         marginTop: "auto",
         flexDirection: "row",
-        marginRight: "auto",
+        width: "100%",
         fontFamily: "var(--font-poppins)",
-
     },
     avatarplaceholder: {
-        width: "50px",
-        height: "50px",
+        width: "30px",
+        height: "30px",
     },
     userSection: {
         background: "var(--color-background)",
         borderRadius: "50%",
-        width: "60px",
-        height: "60px",
+        width: "40px",
+        height: "40px",
         padding: "5px",
         justifyContent: "center",
         alignItems: "center",
         display: "flex",
         boxShadow: "0 0 8px rgba(0, 0, 0, 0.1)",
+    },
+    exitButton: {
+        width: 30,
+        height: 30,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        marginLeft: "auto"
     }
 };
 

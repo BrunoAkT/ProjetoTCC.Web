@@ -16,6 +16,7 @@
     margin-bottom: 16px;
     width: 100%;
     text-align: center;
+    background-color: var(--color-green);
 }
 
 .fileLabel:hover,
@@ -96,7 +97,7 @@ input:focus {
 }
 
 .header {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .title {
@@ -117,4 +118,20 @@ input:focus {
     justify-content: space-between;
     align-items: center;
     display: flex;
+}
+
+.fileInputContainer {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 0px 16px 16px 16px;
+}
+
+.imagePreview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
