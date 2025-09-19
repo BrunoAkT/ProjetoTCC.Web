@@ -6,12 +6,11 @@ function Data() {
     const [dataExercises, setDataExercises] = useState([]);
     const navigate = useNavigate()
 
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzU1NzA3MTQyLCJleHAiOjE3NjU3MDcxNDF9.aLS0bnVuFFGa2I51UjhgtESKNZhod9y3AOvvsG4lSuA"
 
     async function fetchData() {
         try {
             const response = await api.get('/exercises', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
             });
             if (response.data) {
                 console.log(response.data)
@@ -24,6 +23,10 @@ function Data() {
 
     function handleAddExercise() {
         navigate('/dataAdd')
+    }
+
+    function handleEditExercise(id) {
+        navigate('/dataAdd', { state: { id } });
     }
     useEffect(() => {
         fetchData()
@@ -43,7 +46,7 @@ function Data() {
                     <div className={styles.dataList}>
                         {dataExercises.length > 0 ? (
                             dataExercises.map((exercise) => (
-                                <div key={exercise.id} className={styles.dataItem}>
+                                <div key={exercise.id} className={styles.dataItem} onClick={() => handleEditExercise(exercise.id)}>
                                     <h3>{exercise.nome}</h3>
                                     <p>{exercise.descricao}</p>
                                     <p>Duração: {exercise.tempo} minutos</p>

@@ -45,6 +45,8 @@ input {
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
     box-sizing: border-box;
+    font-family: var(--font-poppins);
+
 }
 
 .inputDescription {

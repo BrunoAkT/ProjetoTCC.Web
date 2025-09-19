@@ -3,6 +3,7 @@ import styles from './dataAdd.module.css';
 import { IoIosArrowBack } from "react-icons/io";
 
 import api from '../../constants/api';
+import { useLocation } from 'react-router-dom';
 function DataAdd() {
     const [dataExercises, setDataExercises] = useState([]);
     const [classificacoes, setClassificacoes] = useState("");
@@ -17,39 +18,148 @@ function DataAdd() {
     const [imageFile, setImageFile] = useState(null);
     const [preview, setPreview] = useState(null);
 
+    const [nome, setNome] = useState("");
+    const [descricao, setDescricao] = useState("");
+    const [duracao, setDuracao] = useState("");
+    const [linkVideo, setLinkVideo] = useState("");
+    const [audioFile, setAudioFile] = useState(null);
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
+        console.log(file);
         if (file) {
             setImageFile(file); // Guarda o arquivo para enviar depois
             setPreview(URL.createObjectURL(file)); // Cria URL temporária para exibir
         }
     };
 
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzU1NzA3MTQyLCJleHAiOjE3NjU3MDcxNDF9.aLS0bnVuFFGa2I51UjhgtESKNZhod9y3AOvvsG4lSuA"
+    async function handleAddExercise() {
+        console.log({
+            nome,
+            descricao,
+            duracao,
+            linkVideo,
+            audioFile,
+            imageFile,
+            classificacoes
+        });
 
-    // async function fetchData() {
-    //     try {
-    //         const response = await api.get('/exercises', {
-    //             headers: { Authorization: `Bearer ${token}` }
-    //         });
-    //         if (response.data) {
-    //             console.log(response.data)
-    //             setDataExercises(response.data)
-    //         }
-    //     } catch (error) {
-    //         alert("Erro ao buscar dados: " + error.message);
-    //     }
-    // }
-    // useEffect(() => {
-    //     fetchData()
-    // }, [])
+        if (!nome || !descricao || !duracao || !imageFile || !classificacoes) {
+            alert("Por favor, preencha todos os campos obrigatórios.");
+            return;
+        }
+        const formData = new FormData();
+        formData.append('name', nome);
+        formData.append('description', descricao);
+        formData.append('time', duracao);
+        formData.append('video', linkVideo || '');
+        formData.append('image', imageFile);
+        formData.append('audio', audioFile || '');
+        formData.append('type', classificacoes);
 
-    const [imageName, setImageName] = useState("");
+        try {
+            const response = await api.post('/exercises', formData, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+            });
+            if (response.data) {
+                alert("Exercício adicionado com sucesso!");
+                window.history.back();
+            }
+        } catch (error) {
+            console.log("Erro ao adicionar exercício: " + error.message);
+        }
+    }
+    async function handleEditExercise() {
+        console.log({
+            nome,
+            descricao,
+            duracao,
+            linkVideo,
+            audioFile,
+            imageFile,
+            classificacoes
+        });
+
+        if (!nome || !descricao || !duracao || !imageFile || !classificacoes) {
+            alert("Por favor, preencha todos os campos obrigatórios.");
+            return;
+        }
+        const formData = new FormData();
+        formData.append('name', nome);
+        formData.append('description', descricao);
+        formData.append('time', duracao);
+        formData.append('video', linkVideo || '');
+        if (imageFile instanceof File) {
+            formData.append('image', imageFile);
+        }
+        if (audioFile instanceof File) {
+            formData.append('audio', audioFile);
+        }
+        formData.append('type', classificacoes);
+
+        try {
+            const response = await api.put(`/exercises/${location.state.id}`, formData, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+            });
+            if (response.data) {
+                alert("Exercício editado com sucesso!");
+                window.history.back();
+            }
+        } catch (error) {
+            console.log("Erro ao editar exercício: " + error.message);
+        }
+    }
+
+    const location = useLocation();
+
+
+    async function fetchData() {
+        try {
+            const response = await api.get(`/exercises/${location.state.id}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+            });
+            if (response.data) {
+                console.log("Dados do exercício para edição:", response.data);
+                setNome(response.data[0].nome || "");
+                setDescricao(response.data[0].descricao || "");
+                setDuracao(response.data[0].tempo || "");
+                setLinkVideo(response.data[0].video || "");
+                setClassificacoes(response.data[0].tipo || "");
+                setImageFile(`${api.defaults.baseURL}/uploads/${response.data[0].image || ""}`);
+                setPreview(`${api.defaults.baseURL}/uploads/${response.data[0].image || ""}`);
+                setAudioFile(`${api.defaults.baseURL}/uploads/${response.data[0].audio || ""}`); // Similar para áudio, se aplicável
+            }
+        } catch (error) {
+            alert("Erro ao buscar dados: " + error.message);
+        }
+    }
+
+    async function renderImage() {
+        try{
+            const response = await api.get(`/exercises/${location.state.id}/image`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+            });
+            if (response.data) {
+                console.log("Dados do exercício para edição:", response.data);
+            }
+        } catch (error) {  
+
+        }
+    }
+
+    useEffect(() => {
+        if (location.state && location.state.id) {
+            fetchData()
+        }
+    }, [])
+
+
     return (
         <div className={styles.mainContainer}>
             <main className={styles.mainContent}>
                 <header className={styles.header}>
-                    <h1 className={styles.title}>Adicionar Exercício</h1>
+                    {location.state && location.state.id ? <h1 className={styles.title}>Editar Exercício {location.state.id}</h1> : <h1 className={styles.title}>Adicionar Exercício</h1>}
+
                 </header>
                 <section className={styles.dataSection}>
                     <div className={styles.sectionHeader}>
@@ -57,13 +167,21 @@ function DataAdd() {
                             <IoIosArrowBack size={45} />
                         </div>
                         <h2 className={styles.sectionTitle}>Exercício</h2>
-                        <button className={styles.addButton}>Adicionar</button>
+
+
+                        {location.state && location.state.id ? <button className={styles.addButton} onClick={renderImage}>Salvar</button> :
+                            <button className={styles.addButton} onClick={handleAddExercise}>Adicionar</button>
+                        }
                     </div>
                     <div className={styles.dataList}>
                         <p>Formulário para adicionar exercício</p>
-                        <input type="text" placeholder="Nome (texto)" className={styles.input} />
-                        <textarea placeholder="Descrição (texto)" className={styles.inputDescription} />
-                        <input type="number" placeholder="Duração (minutos)" min="0" step="1" className={styles.input} />
+
+                        <input type="text" placeholder="Nome (texto)" className={styles.input} value={nome} onChange={(e) => setNome(e.target.value)} />
+
+                        <textarea placeholder="Descrição (texto)" className={styles.inputDescription} value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+
+                        <input type="number" placeholder="Duração (minutos)" min="0" step="1" className={styles.input} value={duracao} onChange={(e) => setDuracao(e.target.value)} />
+
                         <div className={styles.fileInputContainer}>
                             <label className={styles.fileLabel}>
                                 Selecionar imagem
@@ -82,8 +200,22 @@ function DataAdd() {
                                 />
                             )}
                         </div>
-                        <input type="url" placeholder="Link do vídeo (URL)" className={styles.input} />
-                        <input type="url" placeholder="Link do áudio (URL)" className={styles.input} />
+                        <input type="url" placeholder="Link do vídeo (URL)" className={styles.input} value={linkVideo} onChange={(e) => setLinkVideo(e.target.value)} />
+
+                        <div className={styles.fileInputContainer}>
+                            <label className={styles.fileLabel}> Selecionar áudio
+                                <input type="file" accept='audio/*' className={styles.input} onChange={(e) => setAudioFile(e.target.files[0])} />
+                            </label>
+                        </div>
+                        {audioFile && (
+                            <audio
+                                controls
+                                src={audioFile instanceof File ? URL.createObjectURL(audioFile) : audioFile}
+                                style={{ width: "100%" }}
+                            >
+                                Seu navegador não suporta áudio.
+                            </audio>
+                        )}
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                             <label htmlFor="classificacao">Classificação do exercício:</label>
                             <input
