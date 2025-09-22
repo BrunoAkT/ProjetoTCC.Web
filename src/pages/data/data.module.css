@@ -38,3 +38,12 @@
   align-items: center;
   display: flex;
 }
+.dataItemHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.Icon{
+  margin-left: 10px;
+  cursor: pointer;
+}

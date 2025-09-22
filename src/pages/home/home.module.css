@@ -1,6 +1,6 @@
 .mainContainer {
   display: flex;
-  width: 100vw;
+  width: calc(100vw - 240px);
   height: 100vh;
   font-family: var(--font-poppins);
   background: var(--color-background);
@@ -26,7 +26,6 @@
   color: var(--color-primary-text);
 }
 
-/* Cards */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

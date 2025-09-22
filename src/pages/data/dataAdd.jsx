@@ -133,20 +133,6 @@ function DataAdd() {
             alert("Erro ao buscar dados: " + error.message);
         }
     }
-
-    async function renderImage() {
-        try{
-            const response = await api.get(`/exercises/${location.state.id}/image`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
-            });
-            if (response.data) {
-                console.log("Dados do exercício para edição:", response.data);
-            }
-        } catch (error) {  
-
-        }
-    }
-
     useEffect(() => {
         if (location.state && location.state.id) {
             fetchData()
@@ -168,8 +154,7 @@ function DataAdd() {
                         </div>
                         <h2 className={styles.sectionTitle}>Exercício</h2>
 
-
-                        {location.state && location.state.id ? <button className={styles.addButton} onClick={renderImage}>Salvar</button> :
+                        {location.state && location.state.id ? <button className={styles.addButton} onClick={handleEditExercise}>Salvar</button> :
                             <button className={styles.addButton} onClick={handleAddExercise}>Adicionar</button>
                         }
                     </div>
