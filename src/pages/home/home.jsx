@@ -8,9 +8,9 @@ function Home() {
                     <h1 className={styles.title}>Bem-vindo ao Dashboard</h1>
                 </header>
                 <section className={styles.cards}>
-                    <div className={styles.card}>
-                        <h2 className={styles.cardTitle}>Estatísticas</h2>
-                        <p className={styles.cardText}>Aqui você verá métricas e dados principais.</p>
+                    <div className={styles.card} onClick={() => window.location.href = '/classification'}>
+                        <h2 className={styles.cardTitle}>Classificação</h2>
+                        <p className={styles.cardText}>Aqui você verá as classificações dos exercicios.</p>
                     </div>
 
                     <div className={styles.card}>

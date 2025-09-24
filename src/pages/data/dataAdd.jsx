@@ -8,11 +8,8 @@ function DataAdd() {
     const [dataExercises, setDataExercises] = useState([]);
     const [classificacoes, setClassificacoes] = useState("");
     const opcoes = [
-        "Respiração Guiada",
-        "Meditação",
-        "Exercício Físico",
-        "Relaxamento Muscular",
-        "Mindfulness"
+        "Respiratorio",
+        "Exercicio Fisico",
     ];
 
     const [imageFile, setImageFile] = useState(null);
