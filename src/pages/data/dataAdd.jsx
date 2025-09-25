@@ -5,12 +5,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import api from '../../constants/api';
 import { useLocation } from 'react-router-dom';
 function DataAdd() {
-    const [dataExercises, setDataExercises] = useState([]);
-    const [classificacoes, setClassificacoes] = useState("");
-    const opcoes = [
-        "Respiratorio",
-        "Exercicio Fisico",
-    ];
+    const [classificacoes, setClassificacoes] = useState({ id: null, nome: "" });
+
+    const [options, setOptions] = useState([]);
 
     const [imageFile, setImageFile] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -38,7 +35,7 @@ function DataAdd() {
             linkVideo,
             audioFile,
             imageFile,
-            classificacoes
+            classificacoes: classificacoes.id
         });
 
         if (!nome || !descricao || !duracao || !imageFile || !classificacoes) {
@@ -52,19 +49,19 @@ function DataAdd() {
         formData.append('video', linkVideo || '');
         formData.append('image', imageFile);
         formData.append('audio', audioFile || '');
-        formData.append('type', classificacoes);
+        formData.append('type', classificacoes.id);
 
-        try {
-            const response = await api.post('/exercises', formData, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
-            });
-            if (response.data) {
-                alert("Exercício adicionado com sucesso!");
-                window.history.back();
-            }
-        } catch (error) {
-            console.log("Erro ao adicionar exercício: " + error.message);
-        }
+        // try {
+        //     const response = await api.post('/exercises', formData, {
+        //         headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+        //     });
+        //     if (response.data) {
+        //         alert("Exercício adicionado com sucesso!");
+        //         window.history.back();
+        //     }
+        // } catch (error) {
+        //     console.log("Erro ao adicionar exercício: " + error.message);
+        // }
     }
     async function handleEditExercise() {
         console.log({
@@ -130,7 +127,23 @@ function DataAdd() {
             alert("Erro ao buscar dados: " + error.message);
         }
     }
+
+    async function loadData() {
+        try {
+            const response = await api.get('/types', {
+                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+            });
+            if (response.data) {
+                // Ensure options is always an array before using .map()
+                setOptions(Array.isArray(response.data) ? response.data : []);
+                console.log("Tipos carregados:", response.data);
+            }
+        } catch (error) {
+            alert("Erro ao buscar dados: " + error.message);
+        }
+    }
     useEffect(() => {
+        loadData();
         if (location.state && location.state.id) {
             fetchData()
         }
@@ -200,19 +213,29 @@ function DataAdd() {
                         )}
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                             <label htmlFor="classificacao">Classificação do exercício:</label>
-                            <input
-                                list="lista-classificacao"
+                            <select
                                 id="classificacao"
-                                value={classificacoes}
-                                onChange={(e) => setClassificacoes(e.target.value)}
-                                placeholder="Digite ou selecione"
-                                className={styles.input}
-                            />
-                            <datalist id="lista-classificacao">
-                                {opcoes.map((opcao, index) => (
-                                    <option key={index} value={opcao} />
+                                className={styles.select}
+                                value={classificacoes.id || ""}
+                                onChange={(e) => {
+                                    const selectedId = parseInt(e.target.value, 10);
+                                    const selectedOption = options.find(opt => opt.id_tipo === selectedId);
+
+                                    if (selectedOption) {
+                                        setClassificacoes({
+                                            id: selectedOption.id_tipo,
+                                            nome: selectedOption.nome_tipo,
+                                        });
+                                    }
+                                }}
+                            >
+                                <option value="" disabled>Selecione uma classificação</option>
+                                {options.map((option) => (
+                                    <option key={option.id_tipo} value={option.id_tipo}>
+                                        {option.nome_tipo}
+                                    </option>
                                 ))}
-                            </datalist>
+                            </select>
                         </div>
                     </div>
                 </section>

@@ -42,7 +42,6 @@ function AddTypeModal({ isOpen, onClose, onSave }) {
             incapableConditions: selectedConditions
         };
         onSave(newType);
-        // Reset state
         setNome('');
         setIcone('');
         setSelectedConditions([]);
@@ -53,14 +52,15 @@ function AddTypeModal({ isOpen, onClose, onSave }) {
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-                <h2>Adicionar Novo Tipo</h2>
+                <h2>Adicionar Nova Classificação</h2>
                 <input
                     type="text"
-                    placeholder="Nome do tipo"
+                    placeholder="Nome"
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
                     className={styles.input}
                 />
+                <p>Insira por icones da biblioteca: <a href={"https://react-icons.github.io/react-icons/icons/fa"} target="_blank" rel="noopener noreferrer">Font Awesome</a></p>
                 <input
                     type="text"
                     placeholder="Ícone (ex: FaHeart)"
