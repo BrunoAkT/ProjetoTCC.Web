@@ -38,7 +38,7 @@ function DataAdd() {
             classificacoes: classificacoes.id
         });
 
-        if (!nome || !descricao || !duracao || !imageFile || !classificacoes) {
+        if (!nome || !descricao || !duracao || !imageFile || !classificacoes?.id) {
             alert("Por favor, preencha todos os campos obrigatórios.");
             return;
         }
@@ -51,17 +51,17 @@ function DataAdd() {
         formData.append('audio', audioFile || '');
         formData.append('type', classificacoes.id);
 
-        // try {
-        //     const response = await api.post('/exercises', formData, {
-        //         headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
-        //     });
-        //     if (response.data) {
-        //         alert("Exercício adicionado com sucesso!");
-        //         window.history.back();
-        //     }
-        // } catch (error) {
-        //     console.log("Erro ao adicionar exercício: " + error.message);
-        // }
+        try {
+            const response = await api.post('/exercises', formData, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+            });
+            if (response.data) {
+                alert("Exercício adicionado com sucesso!");
+                window.history.back();
+            }
+        } catch (error) {
+            console.log("Erro ao adicionar exercício: " + error.message);
+        }
     }
     async function handleEditExercise() {
         console.log({
@@ -71,10 +71,10 @@ function DataAdd() {
             linkVideo,
             audioFile,
             imageFile,
-            classificacoes
+            classificacoes: classificacoes.id
         });
 
-        if (!nome || !descricao || !duracao || !imageFile || !classificacoes) {
+        if (!nome || !descricao || !duracao || !imageFile || !classificacoes?.id) {
             alert("Por favor, preencha todos os campos obrigatórios.");
             return;
         }
@@ -83,13 +83,14 @@ function DataAdd() {
         formData.append('description', descricao);
         formData.append('time', duracao);
         formData.append('video', linkVideo || '');
+        
         if (imageFile instanceof File) {
             formData.append('image', imageFile);
         }
         if (audioFile instanceof File) {
             formData.append('audio', audioFile);
         }
-        formData.append('type', classificacoes);
+        formData.append('type', classificacoes.id);
 
         try {
             const response = await api.put(`/exercises/${location.state.id}`, formData, {
@@ -118,7 +119,8 @@ function DataAdd() {
                 setDescricao(response.data[0].descricao || "");
                 setDuracao(response.data[0].tempo || "");
                 setLinkVideo(response.data[0].video || "");
-                setClassificacoes(response.data[0].tipo || "");
+                // Ensure classificacoes is an object with an `id` so the select's value matches
+                setClassificacoes({ id: response.data[0].id_tipo_exercicio || null, nome: "" });
                 setImageFile(`${api.defaults.baseURL}/uploads/${response.data[0].image || ""}`);
                 setPreview(`${api.defaults.baseURL}/uploads/${response.data[0].image || ""}`);
                 setAudioFile(`${api.defaults.baseURL}/uploads/${response.data[0].audio || ""}`); // Similar para áudio, se aplicável

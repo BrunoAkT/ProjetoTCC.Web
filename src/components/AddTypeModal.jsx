@@ -3,7 +3,7 @@ import styles from './AddTypeModal.module.css';
 import api from '../constants/api';
 import * as FaIcons from "react-icons/fa";
 
-function AddTypeModal({ isOpen, onClose, onSave }) {
+function AddTypeModal({ isOpen, onClose, onSave, typeToEdit }) {
     const [nome, setNome] = useState('');
     const [icone, setIcone] = useState('');
     const [conditions, setConditions] = useState([]);
@@ -24,8 +24,43 @@ function AddTypeModal({ isOpen, onClose, onSave }) {
                 }
             }
             fetchConditions();
+            if (typeToEdit) {
+                async function fetchTypeDetails() {
+
+                    try {
+                        const response = await api.get(`/types/${typeToEdit}`, {
+                            headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+                        });
+                        if (response.data) {
+                            setNome(response.data[0].nome_tipo || '');
+                            setIcone(response.data[0].icon || '');
+                        }
+                    } catch (error) {
+                        console.error("Erro ao buscar detalhes do tipo:", error);
+                    }
+                }
+                async function fetchTypeConditions() {
+                    try {
+                        const response = await api.get(`/types/restrictions/${typeToEdit}`, {
+                            headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+                        });
+                        if (response.data) {
+                            console.log("Condições incapacitantes do tipo:", response.data);
+                            setSelectedConditions(response.data.conditions ? response.data.conditions.map(c => c.id) : []);
+                        }
+                    } catch (error) {
+                        console.error("Erro ao buscar condições do tipo:", error);
+                    }
+                }
+                fetchTypeDetails();
+                fetchTypeConditions();
+            } else {
+                setNome('');
+                setIcone('');
+                setSelectedConditions([]);
+            }
         }
-    }, [isOpen]);
+    }, [isOpen, typeToEdit]);
 
     const handleCheckboxChange = (conditionId) => {
         setSelectedConditions(prev =>
@@ -52,7 +87,7 @@ function AddTypeModal({ isOpen, onClose, onSave }) {
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-                <h2>Adicionar Nova Classificação</h2>
+                <h2>{typeToEdit ? 'Editar Classificação' : 'Adicionar Nova Classificação'}</h2>
                 <input
                     type="text"
                     placeholder="Nome"
@@ -85,7 +120,7 @@ function AddTypeModal({ isOpen, onClose, onSave }) {
                 </div>
                 <div className={styles.modalActions}>
                     <button onClick={onClose} className={styles.cancelButton}>Cancelar</button>
-                    <button onClick={handleSave} className={styles.saveButton}>Salvar</button>
+                    <button onClick={handleSave} className={styles.saveButton}>{typeToEdit ? 'Salvar Alterações' : 'Salvar'}</button>
                 </div>
             </div>
         </div>

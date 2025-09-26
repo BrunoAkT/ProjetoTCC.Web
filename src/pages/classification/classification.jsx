@@ -43,34 +43,60 @@ function Classification() {
 
     const [openMenuId, setOpenMenuId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [typeToEdit, setTypeToEdit] = useState(null);
 
     function toggleMenu(id) {
         setOpenMenuId(openMenuId === id ? null : id);
     }
 
-    async function handleCreateType(newType) {
-        try {
-            const payload = {
-                name: newType.nome,
-                icon: newType.icone,
-                conditions: newType.incapableConditions || []
-            };
-            console.log('Payload para criação de tipo:', payload);
-            const response = await api.post('/types', payload, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
-            });
-            console.log('Resposta do POST /types:', response);
-            if (response && response.status >= 200 && response.status < 300) {
-                alert('Tipo criado com sucesso!');
-                setIsModalOpen(false);
-                fetchTypes();
-            } else {
-                console.error('Resposta inesperada ao criar tipo:', response);
-                alert('Não foi possível criar o tipo. Verifique o console para mais detalhes.');
+    function handleEditType(id_tipo) {
+        setTypeToEdit(id_tipo);
+        setIsModalOpen(true);
+    }
+
+    async function handleSaveType(newType) {
+        // Se estiver editando, faz update, senão cria
+        if (typeToEdit) {
+            try {
+                const payload = {
+                    name: newType.nome,
+                    icon: newType.icone,
+                    conditions: newType.incapableConditions || []
+                };
+                const response = await api.put(`/types/${typeToEdit.id_tipo}`, payload, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+                });
+                if (response && response.status >= 200 && response.status < 300) {
+                    alert('Tipo editado com sucesso!');
+                    setIsModalOpen(false);
+                    setTypeToEdit(null);
+                    fetchTypes();
+                } else {
+                    alert('Não foi possível editar o tipo.');
+                }
+            } catch (err) {
+                alert('Erro ao editar tipo: ' + (err.response?.data?.message || err.message));
             }
-        } catch (err) {
-            console.error('Erro ao criar tipo:', err);
-            alert('Erro ao criar tipo: ' + (err.response?.data?.message || err.message));
+        } else {
+            try {
+                const payload = {
+                    name: newType.nome,
+                    icon: newType.icone,
+                    conditions: newType.incapableConditions || []
+                };
+                const response = await api.post('/types', payload, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+                });
+                if (response && response.status >= 200 && response.status < 300) {
+                    alert('Tipo criado com sucesso!');
+                    setIsModalOpen(false);
+                    fetchTypes();
+                } else {
+                    alert('Não foi possível criar o tipo.');
+                }
+            } catch (err) {
+                alert('Erro ao criar tipo: ' + (err.response?.data?.message || err.message));
+            }
         }
     }
 
@@ -105,7 +131,7 @@ function Classification() {
                 <section className={styles.dataSection}>
                     <div className={styles.sectionHeader}>
                         <h2 className={styles.sectionTitle}>Tipos</h2>
-                        <button className={styles.addButton} onClick={() => setIsModalOpen(true)}>Adicionar Tipo</button>
+                        <button className={styles.addButton} onClick={() => { setIsModalOpen(true); setTypeToEdit(null); }}>Adicionar Tipo</button>
                     </div>
                     <div className={styles.grid}>
                         {types.length > 0 ? (
@@ -123,7 +149,7 @@ function Classification() {
                                         <button className={styles.moreBtn} onClick={() => toggleMenu(type.id_tipo)} aria-label="Mais opções">⋮</button>
                                         {openMenuId === type.id_tipo && (
                                             <div className={styles.menu}>
-                                                <button className={styles.menuItem}>Editar</button>
+                                                <button className={styles.menuItem} onClick={() => handleEditType(type.id_tipo)}>Editar</button>
                                                 <button className={styles.menuItem} onClick={() => openDeleteModal(type.id_tipo, type.nome_tipo)}>Excluir</button>
                                             </div>
                                         )}
@@ -138,7 +164,7 @@ function Classification() {
                             </div>
                         )}
                     </div>
-                    <AddTypeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleCreateType} />
+                    <AddTypeModal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setTypeToEdit(null); }} onSave={handleSaveType} typeToEdit={typeToEdit} />
                 </section>
             </main>
             <ConfirmDeleteModal isOpen={infoModalDeleteInfo.isOpen}
