@@ -63,7 +63,9 @@ function Classification() {
                     icon: newType.icone,
                     conditions: newType.incapableConditions || []
                 };
-                const response = await api.put(`/types/${typeToEdit.id_tipo}`, payload, {
+                console.log(payload)
+                console.log("id ", newType.id)
+                const response = await api.put(`/types/${newType.id}`, payload, {
                     headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
                 });
                 if (response && response.status >= 200 && response.status < 300) {

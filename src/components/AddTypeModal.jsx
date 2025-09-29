@@ -45,8 +45,7 @@ function AddTypeModal({ isOpen, onClose, onSave, typeToEdit }) {
                             headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
                         });
                         if (response.data) {
-                            console.log("Condições incapacitantes do tipo:", response.data);
-                            setSelectedConditions(response.data.conditions ? response.data.conditions.map(c => c.id) : []);
+                            setSelectedConditions(Array.isArray(response.data) ? response.data.map(c => c.id_condicao) : []);
                         }
                     } catch (error) {
                         console.error("Erro ao buscar condições do tipo:", error);
@@ -74,7 +73,8 @@ function AddTypeModal({ isOpen, onClose, onSave, typeToEdit }) {
         const newType = {
             nome,
             icone,
-            incapableConditions: selectedConditions
+            incapableConditions: selectedConditions,
+            id: typeToEdit
         };
         onSave(newType);
         setNome('');
