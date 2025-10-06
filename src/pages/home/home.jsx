@@ -13,8 +13,8 @@ function Home() {
                         <p className={styles.cardText}>Aqui você verá as classificações dos exercicios.</p>
                     </div>
 
-                    <div className={styles.card}>
-                        <h2 className={styles.cardTitle}>Notificações</h2>
+                    <div className={styles.card} onClick={() => window.location.href = '/conditions'}>
+                        <h2 className={styles.cardTitle}>Condições</h2>
                         <p className={styles.cardText}>Mensagens e alertas recentes aparecerão aqui.</p>
                     </div>
 
