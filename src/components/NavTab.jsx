@@ -1,121 +1,60 @@
+import { NavLink, useNavigate } from 'react-router-dom';
+import styles from './NavTab.module.css';
 import icon from "../constants/icon.js";
 import { IoMdExit } from "react-icons/io";
-
-import { useState } from "react";
+import { FaHome, FaListAlt, FaHeartbeat, FaCog, FaUsers, FaUserCircle } from "react-icons/fa";
 
 function NavBar() {
-    const [hoveredLink, setHoveredLink] = useState(null);
-
+    const navigate = useNavigate();
     const name = localStorage.getItem("sessionName");
-    const links = ["Home", "Data", "Configurações"];
+
+    const links = [
+        { text: "Home", path: "/home", icon: <FaHome /> },
+        { text: "Técnicas", path: "/data", icon: <FaHeartbeat /> },
+        { text: "Classificações", path: "/classification", icon: <FaListAlt /> },
+        { text: "Condições", path: "/conditions", icon: <FaHeartbeat /> },
+        { text: "Usuários", path: "/users", icon: <FaUsers /> },
+        { text: "Configurações", path: "/settings", icon: <FaCog /> },
+    ];
+
+    const handleLogout = () => {
+        localStorage.clear();
+        window.location.href = '/'
+    };
 
     return (
-        <aside style={styles.sidebar}>
-            <img src={icon.logoWhite} alt="Logo" style={styles.logoWhite} />
-            <nav style={styles.nav}>
-                {links.map((link, index) => (
-                    <a
-                        key={index}
-                        href={`/${link.toLowerCase()}`}
-                        style={{
-                            ...styles.navLink,
-                            ...(hoveredLink === index ? styles.navLinkHover : {}),
-                        }}
-                        onMouseEnter={() => setHoveredLink(index)}
-                        onMouseLeave={() => setHoveredLink(null)}
+        <aside className={styles.sidebar}>
+            <img src={icon.logoWhite} alt="Logo" className={styles.logoWhite} />
+            <nav className={styles.nav}>
+                {links.map((link) => (
+                    <NavLink
+                        key={link.text}
+                        to={link.path}
+                        className={({ isActive }) =>
+                            `${styles.navLink} ${isActive ? styles.active : ''}`
+                        }
                     >
-                        {link}
-                    </a>
+                        {link.icon}
+                        <span>{link.text}</span>
+                    </NavLink>
                 ))}
             </nav>
-            <div style={styles.footer}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
-                    <div style={styles.userSection}>
-                        <img src={icon.avatarplaceholder} alt='User Avatar' style={styles.avatarplaceholder} />
+            <div className={styles.footer}>
+                <div className={styles.userInfo}>
+                    <div className={styles.avatarPlaceholder}>
+                        <span className={styles.avatarBadge} aria-hidden="true">
+                            <FaUserCircle size={14} />
+                        </span>
                     </div>
-                    <p>{name}</p>
+                    <p className={styles.userName}>{name}</p>
                 </div>
-                <div style={styles.exitButton} onClick={() => {
-                    localStorage.clear();
-                    window.location.href = '/';
-                }}>
-                    <IoMdExit size={30} />
-                </div>
+                <button className={styles.exitButton} onClick={handleLogout} aria-label="Sair">
+                    <IoMdExit size={24} />
+                </button>
             </div>
         </aside>
     );
 }
 
-const styles = {
-    sidebar: {
-        width: "200px",
-        background: "var(--color-primary-text)",
-        color: "var(--color-background)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px 20px",
-        boxShadow: "4px 0 12px rgba(0, 0, 0, 0.1)",
-    },
-    logo: {
-        width: "80px",
-        height: "80px",
-        marginBottom: "40px",
-    },
-    nav: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
-        width: "100%",
-    },
-    navLink: {
-        color: "var(--color-background)",
-        textDecoration: "none",
-        fontWeight: 500,
-        fontSize: "1rem",
-        padding: "10px",
-        borderRadius: "8px",
-        transition: "background 0.2s ease",
-        fontFamily: "var(--font-poppins)",
-    },
-    navLinkHover: {
-        background: "var(--color-primary-button)",
-        color: "var(--color-secondary-text)",
-    },
-    footer: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: "10px",
-        marginTop: "auto",
-        flexDirection: "row",
-        width: "100%",
-        fontFamily: "var(--font-poppins)",
-    },
-    avatarplaceholder: {
-        width: "30px",
-        height: "30px",
-    },
-    userSection: {
-        background: "var(--color-background)",
-        borderRadius: "50%",
-        width: "40px",
-        height: "40px",
-        padding: "5px",
-        justifyContent: "center",
-        alignItems: "center",
-        display: "flex",
-        boxShadow: "0 0 8px rgba(0, 0, 0, 0.1)",
-    },
-    exitButton: {
-        width: 30,
-        height: 30,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        marginLeft: "auto"
-    }
-};
-
 export default NavBar;
+

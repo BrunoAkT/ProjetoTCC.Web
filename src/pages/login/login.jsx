@@ -11,8 +11,7 @@ function Login() {
     const [senha, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const showRegister = () => setIsRegisterVisible(true);
-    const hideRegister = () => setIsRegisterVisible(false);
+
 
     async function executeLogin(e) {
         e.preventDefault();
@@ -72,18 +71,7 @@ function Login() {
                             Entrar
                         </button>
                     </form>
-                    <div className={styles.containerfooter}>
-                        <p className={styles.containerfootertext}>Não possui conta?</p>
-                        <span onClick={showRegister} className={styles.link}>
-                            Cadastre-se!
-                        </span>
-                    </div>
                 </div>
-            </div>
-
-            {/* Painel de Cadastro animado */}
-            <div className={`${styles.animatedContainer} ${isRegisterVisible ? styles.visible : ''}`}>
-                <Account hideRegister={hideRegister} />
             </div>
         </div>
     );
