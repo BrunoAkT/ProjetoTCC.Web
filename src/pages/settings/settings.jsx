@@ -1,23 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './settings.module.css';
+import api from '../../constants/api';
 
 function Settings() {
-	// Profile state
 	const [name, setName] = useState(localStorage.getItem('sessionName') || '');
 	const [email, setEmail] = useState(localStorage.getItem('sessionEmail') || '');
 	const [isEditingProfile, setIsEditingProfile] = useState(false);
 
-	// Security state
-	const [currentPwd, setCurrentPwd] = useState('');
-	const [newPwd, setNewPwd] = useState('');
-	const [confirmPwd, setConfirmPwd] = useState('');
-
-	// Appearance state
 	const savedTheme = useMemo(() => localStorage.getItem('appTheme') || 'light', []);
 	const [theme, setTheme] = useState(savedTheme);
 
 	useEffect(() => {
-		// Apply theme by changing root CSS variables dynamically
 		const root = document.documentElement;
 		const palettes = {
 			light: {
@@ -46,31 +39,29 @@ function Settings() {
 		localStorage.setItem('appTheme', theme);
 	}, [theme]);
 
-	function handleSaveProfile(e) {
-		e.preventDefault();
-		// Minimal local persistence; backend integration can be added later
-		localStorage.setItem('sessionName', name);
-		localStorage.setItem('sessionEmail', email);
-		alert('Perfil atualizado. Algumas áreas podem refletir após recarregar.');
-		setIsEditingProfile(false);
+	async function handleSaveProfile(e) {
+		try {
+			e.preventDefault();
+			localStorage.setItem('sessionName', name);
+			const response = await api.put(`/admin/${localStorage.getItem('sessionID')}`,
+				{
+					nome: name,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('sessionToken')}`
+					}
+				});
+			if (response) {
+				alert('Perfil atualizado. Algumas áreas podem refletir após recarregar.');
+				setIsEditingProfile(false);
+			}
+		} catch (error) {
+			alert('Erro ao atualizar perfil: ' + error.message);
+		}
 	}
 
-	function handleChangePassword(e) {
-		e.preventDefault();
-		if (!currentPwd || !newPwd || !confirmPwd) {
-			alert('Preencha todos os campos.');
-			return;
-		}
-		if (newPwd !== confirmPwd) {
-			alert('A confirmação de senha não confere.');
-			return;
-		}
-		// TODO: integrar com backend (ex.: PUT /admin/password)
-		alert('Requisição de troca de senha enviada (mock).');
-		setCurrentPwd('');
-		setNewPwd('');
-		setConfirmPwd('');
-	}
+
 
 	return (
 		<div className={styles.mainContainer}>
@@ -107,7 +98,7 @@ function Settings() {
 									className={styles.input}
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
-									disabled={!isEditingProfile}
+									disabled={true}
 								/>
 							</label>
 							{isEditingProfile && (
@@ -119,46 +110,6 @@ function Settings() {
 						</form>
 					</div>
 
-					{/* Segurança */}
-					<div className={styles.card}>
-						<div className={styles.cardHeader}>
-							<h2 className={styles.cardTitle}>Segurança</h2>
-						</div>
-						<form className={styles.form} onSubmit={handleChangePassword}>
-							<label className={styles.label}>
-								Senha atual
-								<input
-									type="password"
-									className={styles.input}
-									value={currentPwd}
-									onChange={(e) => setCurrentPwd(e.target.value)}
-								/>
-							</label>
-							<label className={styles.label}>
-								Nova senha
-								<input
-									type="password"
-									className={styles.input}
-									value={newPwd}
-									onChange={(e) => setNewPwd(e.target.value)}
-								/>
-							</label>
-							<label className={styles.label}>
-								Confirmar nova senha
-								<input
-									type="password"
-									className={styles.input}
-									value={confirmPwd}
-									onChange={(e) => setConfirmPwd(e.target.value)}
-								/>
-							</label>
-							<div className={styles.actions}>
-								<button type="submit" className={styles.primaryBtn}>Alterar senha</button>
-							</div>
-						</form>
-					</div>
-
-					{/* Aparência */}
 					<div className={styles.card}>
 						<div className={styles.cardHeader}>
 							<h2 className={styles.cardTitle}>Aparência</h2>
