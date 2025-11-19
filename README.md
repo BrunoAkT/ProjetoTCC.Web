@@ -1,6 +1,13 @@
 # Projeto TCC Web
 
 Este é um projeto de TCC desenvolvido com React e Vite.
+Estrutura do projeto
+
+Web App (este repositório) — Vite
+
+Mobile App: [https://github.com/BrunoAkT/ProjetoTCC.Web](https://github.com/BrunoAkT/ProjetoTCC/tree/main)
+
+Back-end API: [https://github.com/BrunoAkT/ProjetoTCC.BackEnd](https://github.com/BrunoAkT/ProjetoTCC.BackEnd)
 
 ## Pré-requisitos
 
